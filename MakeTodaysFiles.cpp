@@ -38,10 +38,10 @@ void MakeTodaysFiles::MakeFiles(bool bMorning)
 	m_iFileYear = m_nowst.wYear;
 	char cDateTime[256];
 
-	sprintf_s(cDateTime, "%d-%d-%d", 
-			m_iFileDay,
+	sprintf_s(cDateTime, "%d-%02d-%02d", 
+			m_iFileYear,
 			m_iFileMonth,
-			m_iFileYear);
+			m_iFileDay);
 
 	if(bMorning)
 		sprintf_s(cDestFileName,sizeof(cDestFileName),"Morning%s.tcx",cDateTime);

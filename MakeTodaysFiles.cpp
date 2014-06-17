@@ -1,5 +1,6 @@
 #include "MakeTodaysFiles.h"
 #include <direct.h>
+#include <vector>
 
 MakeTodaysFiles::MakeTodaysFiles(char* cDirectory)
 {
@@ -48,9 +49,10 @@ void MakeTodaysFiles::MakeFiles(bool bMorning)
 	else
 		sprintf_s(cDestFileName,sizeof(cDestFileName),"Evening%s.tcx",cDateTime);
 
-	strncpy_s(cDestFilePath, m_cFileDir, sizeof(m_cFileDir));
+	char tmpPath[MAX_PATH];
+	sprintf(tmpPath,"E:\\Dropbox\\Activities\\", sizeof("E:\\Dropbox\\Activities\\"));
+	strncpy_s(cDestFilePath, tmpPath, sizeof(tmpPath));
 	strncat_s(cDestFilePath, cDestFileName, sizeof(cDestFilePath));
-
 	std::ifstream ifile(cOrigFilePath,std::ios::binary);
 	ifile.seekg(0,std::ios_base::end);
 	long s=ifile.tellg();
@@ -60,10 +62,19 @@ void MakeTodaysFiles::MakeFiles(bool bMorning)
 	ifile.close();
 	std::string txt(buffer,s);
 	delete[] buffer;
-	size_t off=0;
 
-	while ((off=txt.find("2014-06-04",off))!=std::string::npos)
-		txt.replace(off,sizeof("2014-06-04")-1,cDateTime);
+	vector<const string> vecDate;
+	vecDate.push_back("2014-04-01\0");
+	vecDate.push_back("2014-06-04\0");
+
+	const string strDate[] = {"2014-06-04", "2014-06-04"};
+
+	for(int i = 0; i < vecDate.size(); i++)
+	{
+		size_t off=0;
+		while ((off=txt.find(vecDate[i],off))!=std::string::npos)
+			txt.replace(off,sizeof("2014-04-01")-1,cDateTime);
+	}
 	std::ofstream ofile(cDestFilePath);
 	ofile.write(txt.c_str(),txt.size());
 }
